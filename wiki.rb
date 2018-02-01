@@ -8,8 +8,8 @@ rescue Errno::ENOENT
   return nil
 end
 
-def save_content(title)
-  File.read("pages/#{title}.txt", "w") do |file|
+def save_content(title, content)
+  File.open("pages/#{title}.txt", "w") do |file|
     file.print(content)
   end
 end
@@ -39,14 +39,14 @@ get "/:title/edit" do
   erb :edit
 end
 
-post "/create" do #setting up post request
-save_content(params["title"], params["content"])
-redirect URI.escape("/#{params["title"]}") #this method tells sinatra to send a redirect response to browser
+post "/create" do
+  save_content(params[:title], params[:content])
+  redirect URI.escape("/#{params[:title]}")
 end
 
 put "/:title" do
-  save_content(params["title"], params["content"])
-  redirect URI.escape("/#{params["title"]}")
+  save_content(params[:title], params[:content])
+  redirect URI.escape("/#{params[:title]}")
 end
 
 #delete page request
